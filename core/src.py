@@ -18,6 +18,8 @@ from PyQt6.QtWidgets import QWidget, QApplication, QMessageBox
 from PyQt6.QtCore import Qt
 from ui.login import Ui_Form as LoginUIMixin
 
+from qt_material import apply_stylesheet
+
 from conf import settings
 from lib.common import pwd_to_sha256
 from interface import admin_interface, common_interface, student_interface
@@ -130,8 +132,11 @@ def run():
     app = QApplication(sys.argv)
 
     login_window = LoginWindow()
+
+    # setup stylesheet
+    # apply_stylesheet(app, theme='dark_teal.xml')
+    # apply_stylesheet(app, theme='light_blue.xml')
+
     login_window.show()
-
-
     sys.excepthook = except_hook # 重新定义异常挂钩
     sys.exit(app.exec())
