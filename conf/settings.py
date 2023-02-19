@@ -20,6 +20,10 @@ DB_DIR = os.path.join(
     'db'
 )
 
+_LOG_DIR = os.path.join(BASE_DIR, 'log')
+if not os.path.isdir(_LOG_DIR):
+    os.mkdir(_LOG_DIR)
+
 LOGGING_DIC = {
     'version': 1.0,
     'disable_existing_loggers': False,
@@ -48,7 +52,7 @@ LOGGING_DIC = {
         'file_info_handler': {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',  # 保存到文件,日志轮转
-            'filename': os.path.join(BASE_DIR, 'log', 'user.log'),
+            'filename': os.path.join(_LOG_DIR, 'user.info.log'),
             'maxBytes': 1024 * 1024 * 10,  # 日志大小 10M
             'backupCount': 10,  # 日志文件保存数量限制
             'encoding': 'utf-8',
@@ -57,7 +61,7 @@ LOGGING_DIC = {
         'file_debug_handler': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',  # 保存到文件
-            'filename': 'test.log',  # 日志存放的路径
+            'filename': os.path.join(_LOG_DIR, 'user.debug.log'),  # 日志存放的路径
             'encoding': 'utf-8',
             'formatter': 'simple',
         }
@@ -65,14 +69,25 @@ LOGGING_DIC = {
     # 日志记录器
     'loggers': {
         '': {
-            'handlers': ['console_debug_handler', 'file_info_handler'],
+            'handlers': ['console_debug_handler', 'file_debug_handler'],
             'level': 'DEBUG',
             'propagate': False,
         }
     }
 }
 
-
+# 日志配置
 import logging.config
-
 logging.config.dictConfig(LOGGING_DIC)
+
+# 配置文件相关
+import configparser
+config = configparser.ConfigParser()
+CONFIG_PATH = os.path.join(
+    BASE_DIR,
+    'conf',
+    'settings.ini'
+)
+config.read(CONFIG_PATH, encoding='utf-8-sig')
+LOGIN_TYPE = config.get('USER', 'LOGIN_TYPE')
+LOGIN_USER = config.get('USER', 'LOGIN_USER')

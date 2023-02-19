@@ -10,9 +10,12 @@
 学生接口
 '''
 import os
+import logging
 
 from conf import settings
 from db import models
+
+stu_logger = logging.getLogger('student')
 
 def student_register_interface(name, pwd):
     stu_path = os.path.join(
@@ -26,5 +29,6 @@ def student_register_interface(name, pwd):
 
     # 学生不存在, 开始注册
     stu_obj = models.Student(name, pwd)
-
-    return True, f'用户{name}注册成功！'
+    msg = f'用户{name}注册成功！'
+    stu_logger.info(msg)
+    return True, msg

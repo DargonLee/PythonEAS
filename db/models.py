@@ -34,6 +34,7 @@ class Admin(Base):
         self.name = name
         self.pwd = pwd
         self.reg_date = datetime.datetime.now()
+        self.locked = False
 
         # 累计付费人次
         self.pay_num = 0
@@ -52,6 +53,8 @@ class Admin(Base):
         '''
         super(Admin, self).__init__(name)
 
+    def add_school(self, name, addr):
+        School(name, addr)
 
 
 
@@ -67,6 +70,12 @@ class Student(Base):
 
 class Teacher(Base):
     pass
+
+class School(Base):
+    def __init__(self, name, addr):
+        self.addr = addr
+        self.course_list = []
+        super(School, self).__init__(name)
 
 class Course(Base):
     pass

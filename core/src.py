@@ -13,10 +13,14 @@
 import logging
 import sys
 test_logger = logging.getLogger('视图层')
+login_window = None
+login_name = None
+login_user_type = None
 
 from PyQt6.QtWidgets import QWidget, QApplication, QMessageBox
 from PyQt6.QtCore import Qt
 from ui.login import Ui_Form as LoginUIMixin
+from ui.home import Ui_Form as HomeUIMixin
 
 from qt_material import apply_stylesheet
 
@@ -31,6 +35,46 @@ class LoginWindow(LoginUIMixin, QWidget):
         self.setWindowFlag(Qt.WindowType.FramelessWindowHint) # 隐藏窗口边框
 
         self.admin_is_here = False
+        self.login_window_init()
+        self.open_login_page()
+
+    #创建学校
+    def add_school(self):
+        name = self.lineEdit_6.text().strip()
+        addr = self.lineEdit_7.text().strip()
+        if not name or not addr:
+            QMessageBox.warning(self, '警告', '学校名或地址不能为空')
+            return
+        # 调用添加学校的接口
+        global login_name
+        flag, msg = admin_interface.add_school_interface(
+            name,
+            addr,
+            login_name
+        )
+        QMessageBox.about(self, '提示', msg)
+        if not flag:
+            return
+        # 学校添加成功，进入主页
+        self.lineEdit_6.setText('')
+        self.lineEdit_7.setText('')
+        self.go_home()
+
+    def go_home(self):
+        self.close()
+        # 进入主页
+        self.home_window = HomeWindow()
+        self.home_window.show()
+
+    # 初始化登录窗口
+    def login_window_init(self):
+        self.lineEdit.setText(settings.LOGIN_USER)
+        user_type_dic = {
+            'Student': self.checkBox,
+            'Teacher': self.checkBox_2,
+            'Admin': self.checkBox_3,
+        }
+        user_type_dic.get(settings.LOGIN_TYPE).setChecked(True)
 
     # 获取用户类型
     def get_user_type(self):
@@ -59,11 +103,36 @@ class LoginWindow(LoginUIMixin, QWidget):
             return
 
         pwd = pwd_to_sha256(pwd)
-        obj = common_interface.login_interface(
+        flag, msg = common_interface.login_interface(
             username, pwd, user_type
         )
+        if not flag:
+            QMessageBox.warning(self, '登录失败',msg)
+            return
 
+        # 登录成功
+        settings.config.set('USER', 'LOGIN_USER', username)
+        settings.config.set('USER', 'LOGIN_TYPE', user_type)
+        with open(settings.CONFIG_PATH, 'w', encoding='utf-8-sig')as f:
+            settings.config.write(f)
 
+        # 记录下用户名和类型
+        global login_name, login_user_type
+        login_name = username
+        login_user_type = user_type
+
+        # 判断是否有学校
+        flag, msg = common_interface.check_obj_is_here('School')
+        if not flag:
+            # 如果没有学校的时候，是管理员登录，跳转到创建学校的界面
+            if user_type == 'Admin':
+                self.stackedWidget.setCurrentIndex(2)
+            else:
+                QMessageBox.warning(self, '警告', '当前不存在学校，请联系管理员添加学校')
+            return
+
+        # 进入主页
+        self.go_home()
 
     # 注册功能
     def register(self):
@@ -117,12 +186,59 @@ class LoginWindow(LoginUIMixin, QWidget):
         self.stackedWidget.setCurrentIndex(1)
 
         # 判断是否有管理员存在
-        flag, msg = common_interface.check_admin_is_here()
+        flag, msg = common_interface.check_obj_is_here('Admin')
         if flag:
             self.label_2.setText('学生注册')
             self.admin_is_here = True
 
+class HomeWindow(HomeUIMixin,QWidget):
+    def __init__(self):
+        super(HomeWindow, self).__init__()
+        self.setupUi(self)
 
+        self.open_home_page()
+
+    # 切换学校
+    def change_school(self):
+        test_logger.debug('切换学校')
+
+    # 打开主页
+    def open_home_page(self):
+        test_logger.debug('打开主页')
+        self.stackedWidget.setCurrentIndex(0)
+
+    # 打开学员管理
+    def open_stu_list_page(self):
+        self.stackedWidget.setCurrentIndex(2)
+
+    # 打开课程管理
+    def open_course_list_page(self):
+        self.stackedWidget.setCurrentIndex(3)
+        print('打开课程管理')
+
+    # 打开老师管理
+    def open_teacher_list_page(self):
+        self.stackedWidget.setCurrentIndex(4)
+        print('打开老师管理')
+
+    # 打开财务
+    def open_money_page(self):
+        self.stackedWidget.setCurrentIndex(5)
+
+    # 打开设置页面
+    def open_settings_page(self):
+        self.stackedWidget.setCurrentIndex(6)
+
+    # 退出登录
+    def login_out(self):
+        self.close()
+        # login_window:LoginWindow
+        login_window.show()
+        login_window.open_login_page()
+
+        global login_name, user_type
+        login_name = None
+        login_user_type = None
 
 def except_hook(cls, exception, traceback):
     sys.__excepthook__(cls, exception, traceback)
@@ -131,6 +247,7 @@ def run():
     # 展示界面
     app = QApplication(sys.argv)
 
+    global login_window
     login_window = LoginWindow()
 
     # setup stylesheet

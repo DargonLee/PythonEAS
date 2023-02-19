@@ -43,7 +43,7 @@ def select_data(cls, name):
     )
 
     # 判断文件是否存在
-    if os.path.exists(obj_path):
+    if not os.path.exists(obj_path):
         return
 
     # 读取文件
