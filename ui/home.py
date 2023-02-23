@@ -760,6 +760,7 @@ class Ui_Form(object):
         self.tableWidget = QtWidgets.QTableWidget(self.page_3)
         self.tableWidget.setStyleSheet("QTableWidget:item{\n"
 "border-bottom:0.5px solid rgb(192, 192, 192);\n"
+"    selection-color: rgb(0, 0, 0);\n"
 "}")
         self.tableWidget.setShowGrid(False)
         self.tableWidget.setObjectName("tableWidget")
@@ -844,6 +845,7 @@ class Ui_Form(object):
         self.tableWidget_2 = QtWidgets.QTableWidget(self.page_4)
         self.tableWidget_2.setStyleSheet("QTableWidget:item{\n"
 "border-bottom:0.5px solid rgb(192, 192, 192);\n"
+"selection-color: rgb(0, 0, 0);\n"
 "}")
         self.tableWidget_2.setShowGrid(False)
         self.tableWidget_2.setObjectName("tableWidget_2")
@@ -930,6 +932,7 @@ class Ui_Form(object):
         self.tableWidget_3 = QtWidgets.QTableWidget(self.page_5)
         self.tableWidget_3.setStyleSheet("QTableWidget:item{\n"
 "border-bottom:0.5px solid rgb(192, 192, 192);\n"
+"selection-color: rgb(0, 0, 0);\n"
 "}")
         self.tableWidget_3.setShowGrid(False)
         self.tableWidget_3.setObjectName("tableWidget_3")
@@ -990,6 +993,7 @@ class Ui_Form(object):
         self.tableWidget_4 = QtWidgets.QTableWidget(self.tab)
         self.tableWidget_4.setStyleSheet("QTableWidget:item{\n"
 "border-bottom:0.5px solid rgb(192, 192, 192);\n"
+"selection-color: rgb(0, 0, 0);\n"
 "}")
         self.tableWidget_4.setShowGrid(False)
         self.tableWidget_4.setObjectName("tableWidget_4")
@@ -1042,6 +1046,7 @@ class Ui_Form(object):
         self.tableWidget_5 = QtWidgets.QTableWidget(self.tab_2)
         self.tableWidget_5.setStyleSheet("QTableWidget:item{\n"
 "border-bottom:0.5px solid rgb(192, 192, 192);\n"
+"selection-color: rgb(0, 0, 0);\n"
 "}")
         self.tableWidget_5.setShowGrid(False)
         self.tableWidget_5.setObjectName("tableWidget_5")
@@ -1186,7 +1191,7 @@ class Ui_Form(object):
         self.horizontalLayout_2.addLayout(self.horizontalLayout)
 
         self.retranslateUi(Form)
-        self.stackedWidget.setCurrentIndex(6)
+        self.stackedWidget.setCurrentIndex(5)
         self.tabWidget.setCurrentIndex(1)
         self.pushButton.clicked.connect(Form.open_home_page)
         self.pushButton_2.clicked.connect(Form.open_stu_list_page)

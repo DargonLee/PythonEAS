@@ -18,9 +18,10 @@ login_name = None
 login_user_type = None
 
 from PyQt6.QtWidgets import QWidget, QApplication, QMessageBox
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QCoreApplication
 from ui.login import Ui_Form as LoginUIMixin
 from ui.home import Ui_Form as HomeUIMixin
+_translate = QCoreApplication.translate
 
 from qt_material import apply_stylesheet
 
@@ -179,6 +180,8 @@ class LoginWindow(LoginUIMixin, QWidget):
     def open_login_page(self):
         test_logger.debug('打开登录页面')
         self.stackedWidget.setCurrentIndex(0)
+        self.lineEdit.setFocus()
+        self.show()
 
     # 打开注册页面
     def open_register_page(self):
@@ -191,16 +194,71 @@ class LoginWindow(LoginUIMixin, QWidget):
             self.label_2.setText('学生注册')
             self.admin_is_here = True
 
+    # 打开创建学校页面
+    def open_add_school_page(self):
+        self.stackedWidget.setCurrentIndex(2)
+        self.show()
+
 class HomeWindow(HomeUIMixin,QWidget):
     def __init__(self):
         super(HomeWindow, self).__init__()
         self.setupUi(self)
 
         self.open_home_page()
+        self.home_window_init()
+
+    # 主页数据初始化
+    def home_window_init(self):
+        self.load_school_name()
+
+        if login_user_type == 'Admin':
+            self.admin_init()
+        elif login_user_type == 'Teacher':
+            self.teacher_init()
+        elif login_user_type == 'Student':
+            self.student_init()
+
+    # 管理员数据初始化
+    def admin_init(self):
+        # self.stackedWidget.setCurrentIndex(0)
+        pass
+
+    # 学生数据初始化
+    def student_init(self):
+        self.teacher_init()
+        self.pushButton_6.close()
+
+    # 老师数据初始化
+    def teacher_init(self):
+        self.pushButton_2.close()
+        self.pushButton_4.close()
+        self.pushButton_5.close()
+        self.pushButton_3.setText('查看课程')
+        # self.stackedWidget.setCurrentIndex(1)
+
+    # 学校名字加载功能
+    def load_school_name(self, combobox=None):
+        school_name_list = common_interface.get_all_school_name()
+        if login_user_type == 'Admin' and not combobox:
+            school_name_list.append('添加学校')
+            combobox = self.comboBox
+        if not combobox:
+            combobox = self.comboBox
+
+        combobox.close()
+
+        for index, school_name in enumerate(school_name_list):
+            self.combobox.addItem("")
+            self.comboBox.setItemText(index, _translate("self", school_name))
+
 
     # 切换学校
     def change_school(self):
         test_logger.debug('切换学校')
+        current_text = self.comboBox.currentText()
+        if current_text == '添加学校':
+            login_window.show()
+            login_window.open_add_school_page()
 
     # 打开主页
     def open_home_page(self):

@@ -290,7 +290,7 @@ color: rgb(0, 249, 0);
            <string notr="true">background-color: rgb(255, 255, 255);</string>
           </property>
           <property name="currentIndex">
-           <number>6</number>
+           <number>5</number>
           </property>
           <widget class="QWidget" name="page">
            <layout class="QHBoxLayout" name="horizontalLayout_18">
@@ -1324,6 +1324,7 @@ background-color:rgb(19,24,39);
                 <property name="styleSheet">
                  <string notr="true">QTableWidget:item{
 border-bottom:0.5px solid rgb(192, 192, 192);
+	selection-color: rgb(0, 0, 0);
 }</string>
                 </property>
                 <property name="showGrid">
@@ -1492,6 +1493,7 @@ background-color:rgb(19,24,39);
                 <property name="styleSheet">
                  <string notr="true">QTableWidget:item{
 border-bottom:0.5px solid rgb(192, 192, 192);
+selection-color: rgb(0, 0, 0);
 }</string>
                 </property>
                 <property name="showGrid">
@@ -1666,6 +1668,7 @@ background-color:rgb(19,24,39);
                 <property name="styleSheet">
                  <string notr="true">QTableWidget:item{
 border-bottom:0.5px solid rgb(192, 192, 192);
+selection-color: rgb(0, 0, 0);
 }</string>
                 </property>
                 <property name="showGrid">
@@ -1795,6 +1798,7 @@ border-bottom:0.5px solid rgb(192, 192, 192);
                   <property name="styleSheet">
                    <string notr="true">QTableWidget:item{
 border-bottom:0.5px solid rgb(192, 192, 192);
+selection-color: rgb(0, 0, 0);
 }</string>
                   </property>
                   <property name="showGrid">
@@ -1912,6 +1916,7 @@ border-bottom:0.5px solid rgb(192, 192, 192);
                   <property name="styleSheet">
                    <string notr="true">QTableWidget:item{
 border-bottom:0.5px solid rgb(192, 192, 192);
+selection-color: rgb(0, 0, 0);
 }</string>
                   </property>
                   <property name="showGrid">

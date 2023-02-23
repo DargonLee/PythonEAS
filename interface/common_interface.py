@@ -60,3 +60,11 @@ def login_interface(name, pwd, user_type):
     msg = f'用户：{name} 登录成功'
     common_logger.info(msg)
     return True, msg
+
+# 获取所有学校名字的接口
+def get_all_school_name():
+    school_dir = os.path.join(
+        settings.DB_DIR,
+        'School'
+    )
+    return os.listdir(school_dir)
