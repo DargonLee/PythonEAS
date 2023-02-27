@@ -59,10 +59,14 @@ class LoginWindow(LoginUIMixin, QWidget):
         # 学校添加成功，进入主页
         self.lineEdit_6.setText('')
         self.lineEdit_7.setText('')
-        self.go_home()
+        self.go_home(name)
 
-    def go_home(self):
+    def go_home(self, new_school_name=None):
         self.close()
+        if self.home_window:
+            self.home_window.load_school_name()
+            self.home_window.comboBox.setCurrentText(new_school_name)
+            return
         # 进入主页
         self.home_window = HomeWindow()
         self.home_window.show()
@@ -199,6 +203,10 @@ class LoginWindow(LoginUIMixin, QWidget):
         self.stackedWidget.setCurrentIndex(2)
         self.show()
 
+    def open_add_course_page(self):
+        self.stackedWidget.setCurrentIndex(3)
+        self.show()
+
 class HomeWindow(HomeUIMixin,QWidget):
     def __init__(self):
         super(HomeWindow, self).__init__()
@@ -259,6 +267,10 @@ class HomeWindow(HomeUIMixin,QWidget):
         if current_text == '添加学校':
             login_window.show()
             login_window.open_add_school_page()
+
+    # 打开创建课程页面
+    def open_add_course_page(self):
+        login_window.open_add_course_page
 
     # 打开主页
     def open_home_page(self):
